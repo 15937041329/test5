@@ -8,9 +8,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
+import com.test.demo.redis.config.RedisUtil;
 import javax.annotation.Resource;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * @program: Test
@@ -25,6 +30,13 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserService userService;
+    @Autowired
+    RedisUtil redisUtil;
+    @Autowired
+    RedisTemplate redisTemplate;
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
 
     /**
      * @param userName
@@ -65,6 +77,15 @@ public class UserController {
     @GetMapping("/user")
     public ApiResponseEntity getUser() {
         try {
+            stringRedisTemplate.opsForValue().set("user:name", "张三");
+            stringRedisTemplate.opsForValue().get("user:name");
+            System.out.println("resExpire=000000");
+            redisUtil.exists("b");
+            redisUtil.set("20182018","这是一条测试数据",0);
+            Long resExpire = redisUtil.expire("20182018", 60, 0);//设置key过期时间
+            System.out.println("resExpire="+resExpire);
+            String res = redisUtil.get("20182018", 0);
+            System.out.println("res="+res);
             List<User> users = userService.queryUsers();
             if (users == null) {
                 return ApiResponseEntity.notFound();

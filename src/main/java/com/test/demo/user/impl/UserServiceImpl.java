@@ -1,11 +1,11 @@
 package com.test.demo.user.impl;
 
+
 import com.test.demo.publicres.exception.BusinessException;
 import com.test.demo.user.dao.UserDao;
 import com.test.demo.user.entity.User;
 import com.test.demo.user.service.UserService;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -19,6 +19,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
+
 
     @Override
     public User queryUserByUserName(String userName, String passWord) throws BusinessException {
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public Integer addUser(User user) throws BusinessException {
         try {
@@ -47,6 +49,9 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("新增用户失败");
         }
     }
+
+
+
 
     @Override
     public Boolean updateUserById(User user) throws BusinessException {
@@ -78,12 +83,25 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
+   /* @Override
     public List<User> queryUsers() throws BusinessException {
         try {
             return userDao.queryUsers();
         } catch (BusinessException e) {
             throw new BusinessException("查询所有用户失败");
         }
+    }*/
+
+    @Override
+    public List<User> queryUsers() throws BusinessException {
+        try {
+            List<User> list=userDao.queryUsers();
+            // 具体使用
+
+            return userDao.queryUsers();
+        } catch (BusinessException e) {
+            throw new BusinessException("查询所有用户失败");
+        }
     }
+
 }
